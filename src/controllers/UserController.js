@@ -1,10 +1,14 @@
 const knex = require('../database/index');
 
 module.exports = {
-    async index(request, response) {
-        const results = await knex('users');
+    async index(request, response, next) {
+        try {
+            const results = await knex('users');
 
-        return response.json(results);
+            return response.json(results);
+        } catch (error) {
+            next(error);
+        }
     },
     async create(request, response, next) {
         try {
