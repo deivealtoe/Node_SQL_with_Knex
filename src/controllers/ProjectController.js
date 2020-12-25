@@ -1,6 +1,4 @@
-const { orWhereNotExists } = require('../database/index');
 const knex = require('../database/index');
-const { create } = require('./UserController');
 
 module.exports = {
     async index(request, response, next) {
@@ -44,6 +42,17 @@ module.exports = {
             });
 
             return response.status(201).send();
+        } catch (error) {
+            next(error);
+        }
+    },
+    async delete(request, response, next) {
+        try {
+            const { id } = request.params;
+
+            await knex('projects').where({ id }).del();
+
+            response.status(200).send();
         } catch (error) {
             next(error);
         }
