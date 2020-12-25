@@ -3,7 +3,8 @@ const knex = require('../database/index');
 module.exports = {
     async index(request, response, next) {
         try {
-            const results = await knex('users');
+            const results = await knex('users')
+                .where('deleted_at', null);
 
             return response.json(results);
         } catch (error) {
@@ -28,7 +29,9 @@ module.exports = {
             const { username } = request.body;
             const { id } = request.params;
 
-            await knex('users').update({ username }).where({ id });
+            await knex('users')
+                .update({ username })
+                .where({ id });
 
             return response.status(200).send();
         } catch (error) {
@@ -39,7 +42,10 @@ module.exports = {
         try {
             const { id } = request.params;
 
-            await knex('users').where({ id }).del();
+            await knex('users')
+                .where({ id })
+                .update('deleted_at', new Date)
+                /*.del()*/;
 
             return response.status(200).send();
         } catch (error) {

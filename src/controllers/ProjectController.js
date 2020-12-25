@@ -10,6 +10,7 @@ module.exports = {
             const query = knex('projects')
                 .join('users', 'users.id', '=', 'projects.user_id')
                 .select('projects.*', 'users.username')
+                .where('users.deleted_at', null)
                 .limit(5)
                 .offset((page - 1) * 5);
             
